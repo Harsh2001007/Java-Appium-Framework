@@ -1,9 +1,12 @@
 package org.ulAppiumFramework;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
@@ -11,10 +14,14 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
 
 public class BaseTest {
 
@@ -33,7 +40,7 @@ public class BaseTest {
 
         UiAutomator2Options options= new UiAutomator2Options();
         options.setDeviceName("pix-6");
-        options.setApp("C://Users//TUL//Desktop//ProjectAppium//apps//Beta.apk");
+        options.setApp("C://Users//TUL//Desktop//ProjectAppium//apps//Beta2.apk");
 
         driver = new AndroidDriver(new URI("http://127.0.0.1:4723/").toURL(), options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
@@ -56,6 +63,18 @@ public class BaseTest {
         ((JavascriptExecutor) driver).executeScript("mobile: swipeGesture", ImmutableMap.of("elementId", ((RemoteWebElement)ele).getId(),
                 "direction",direction,
                 "percent",0.75));
+    }
+
+
+    public List<HashMap<String, String>> getJsonData(String jsonFilePath) throws IOException{
+
+        //convert json file content to json string
+        String jsonContent = FileUtils.readFileToString(new File(jsonFilePath), StandardCharsets.UTF_8);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<HashMap<String, String>> data = mapper.readValue(jsonContent, new TypeReference<List<HashMap<String, String>>>() {
+        });
+        return data;
     }
 
     @AfterClass
