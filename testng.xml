@@ -6,7 +6,7 @@
     </listeners>
     <test verbose="2" preserve-order="true" name="test">
         <classes>
-            <class name="org.ulAppiumFramework.ulLogin">
+            <class name="org.AndroidTests.ulLogin">
                 <methods>
                     <include name="AppLogin"/>
                 </methods>
