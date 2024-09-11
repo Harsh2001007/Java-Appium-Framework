@@ -88,7 +88,11 @@ public class BaseTest {
 
     @AfterClass(alwaysRun = true)
     public void tearDown(){
-        driver.quit();
-        service.stop();
+        if (driver != null) {
+            driver.quit();
+        }
+        if (service != null) {
+            service.stop();
+        }
     }
 }
