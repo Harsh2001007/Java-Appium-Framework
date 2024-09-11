@@ -2,12 +2,14 @@ package org.AndroidTests;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.testng.annotations.AfterClass;
@@ -28,7 +30,7 @@ public class BaseTest {
     public AndroidDriver driver;
     public AppiumDriverLocalService service;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void configureAppium() throws URISyntaxException, MalformedURLException {
         service = new AppiumServiceBuilder()
                 .withAppiumJS(new File("C://Users//TUL//AppData//Roaming//npm//node_modules//appium//build//lib//main.js"))
@@ -77,7 +79,14 @@ public class BaseTest {
         return data;
     }
 
-    @AfterClass
+    public String getScreenshotPath(String testCaseName, AppiumDriver driver) throws IOException {
+        File source = driver.getScreenshotAs(OutputType.FILE);
+        String destinationFile = System.getProperty("user.dir")+"//reports"+testCaseName+".png";
+        FileUtils.copyFile(source, new File(destinationFile));
+        return destinationFile;
+    }
+
+    @AfterClass(alwaysRun = true)
     public void tearDown(){
         driver.quit();
         service.stop();

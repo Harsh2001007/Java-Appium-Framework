@@ -4,14 +4,19 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentReporter;
+import io.appium.java_client.AppiumDriver;
+import org.AndroidTests.BaseTest;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-public class Listeners implements ITestListener {
+import java.io.IOException;
+
+public class Listeners extends BaseTest implements ITestListener {
     ExtentTest test;
 
     ExtentReports extent = ExtentRepoterNG.getReporterObject();
+    AppiumDriver driver;
 
     @Override
     public void onTestStart(ITestResult result){
@@ -29,6 +34,20 @@ public class Listeners implements ITestListener {
         // method for test failure
         //screenshot attachment
         test.fail(result.getThrowable());
+        try {
+            driver = (AppiumDriver) result.getTestClass().getRealClass().getField("driver").get(result.getInstance());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        try {
+            test.addScreenCaptureFromPath(getScreenshotPath(result.getMethod().getMethodName(),driver),result.getMethod().getMethodName());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

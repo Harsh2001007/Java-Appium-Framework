@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ulLogin extends BaseTest {
 
-    @Test(dataProvider="getData")
+    @Test(dataProvider="getData", groups = {"Smoke"})
     public void AppLogin(HashMap<String,String> inputs) throws InterruptedException, MalformedInputException {
 
 
@@ -69,7 +69,7 @@ public class ulLogin extends BaseTest {
         Assert.assertEquals(driver.findElement(AppiumBy.accessibilityId("SubHeading")).getText(),"Dive into hassle-free accommodation hunting!");
         Assert.assertEquals(driver.findElement(By.xpath("//android.widget.TextView[@text='Welcome! ']")).getText(),"Welcome! ");
         Assert.assertEquals(driver.findElement(By.xpath("//android.widget.TextView[@text=\"Personalize My Journey\"]")).getText(),"Personalize My Journey");
-        Assert.assertEquals(driver.findElement(By.xpath("//android.widget.TextView[@text=\"I'll do it later\"]")).getText(),"I'll do it later");
+        Assert.assertEquals(driver.findElement(By.xpath("//android.widget.TextView[@text=\"I'll do it laters\"]")).getText(),"I'll do it later");
 
         loginpage.illDoItLaterBtn();
 
